@@ -15,6 +15,8 @@ To be clear, this isn't an implementation of this in Cobalt Strike, but rather t
 
 <b>IMPORTANT:</b> The size of the named pipe being sent/received is hardcoded in. By default it's set to 1.5MB. Keep in mind that the buffer will need to hold the BASE64 ENCODED version of the assembly plus the arguments. This means that an assembly smaller than 1.5MB may still not work if the Base64 encoding and arguments are larger. The parent process will throw a warning if the payload is larger than the buffer. You should be able to simply increase the buffer size, but I have not tested above 1.5MB. 
 
+By default I've included the shellcode for the execute-assembly payload in the parent-execute-assembly file. However if you don't trust me (which you shouldn't!) then you can reproduce this by using [hasherezade's pe_to_shellcode](https://github.com/hasherezade/pe_to_shellcode) to convert execute-assembly to shellcode. I then used a small assembly which I've put [here](https://gist.github.com/passthehashbrowns/e860a590681484c0125520c696892a55) which will print out the shellcode that you can paste into the project. 
+
 As mentioned earlier the path-to-local-executable only needs to be readable by the parent process. You can also load from a remote file share by simply passing in the UNC path, such as \\\attacker\seatbelt.exe. 
 
 ![execution](https://github.com/passthehashbrowns/passthehashbrowns.github.io/blob/master/images/seatbelt_executing.png)
