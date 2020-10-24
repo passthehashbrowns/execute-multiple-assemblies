@@ -53,6 +53,8 @@ HANDLE g_CurrentStdErr = INVALID_HANDLE_VALUE;
 char sig_40[] = { 0x76,0x34,0x2E,0x30,0x2E,0x33,0x30,0x33,0x31,0x39 };
 char sig_20[] = { 0x76,0x32,0x2E,0x30,0x2E,0x35,0x30,0x37,0x32,0x37 };
 
+
+
 //Functions to handle base64 conversation of assemblies
 static const std::string base64_chars =
 "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -128,6 +130,7 @@ std::string base64_decode(std::string const& encoded_string) {
 	}
 	return ret;
 }
+
 
 //Find the CLR version that we want to load
 BOOL FindVersion(void* assembly, int length)
@@ -380,8 +383,8 @@ int main() {
 	
 	HANDLE hPipe;
 	//These variables are the upper bound on the assembly size. Note that the static keyword allocates these on the heap, as we get a stack overflow otherwise
-	static char buffer[1000000];
-	static char base64DecodedProgram[1000000];
+	static char buffer[1500000];
+	static char base64DecodedProgram[1500000];
 	DWORD dwRead;
 
 	std::string args = "";
@@ -417,6 +420,10 @@ int main() {
 					
 					//Easier to work with string operations here
 					bufString = buffer;
+					if (strcmp(buffer, "exit") == 0)
+					{
+						return 0;
+					}
 					std::string delimiter = " ";
 					std::string base64Program = bufString.substr(0, bufString.find(delimiter));
 					//Decode the assembly and place it into the buffer
