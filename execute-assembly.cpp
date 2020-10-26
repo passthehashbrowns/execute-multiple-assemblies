@@ -260,7 +260,13 @@ int loadAndExecute(PVOID assembly, int assemblyLength, std::string args) {
 
 	std::cout << "[+] pMethodInfo->Invoke_3(...) succeeded" << std::endl;
 	//std::cout << "%s\n", vReturnVal;
-	
+	SecureZeroMemory(assembly, assemblyLength);
+	SecureZeroMemory(&pAssembly, sizeof(pAssembly));
+	SecureZeroMemory(&psaArguments, sizeof(psaArguments));
+	SecureZeroMemory(&vReturnVal, sizeof(VARIANT));
+	SecureZeroMemory(&vEmpty, sizeof(VARIANT));
+	SecureZeroMemory(&vtPsa, sizeof(VARIANT));
+
 	return 0;
 }
 
@@ -379,6 +385,8 @@ int getAssemblyContents(std::string assemblyName)
 	CloseHandle(hFile);
 }
 
+
+
 int main() {
 	
 	HANDLE hPipe;
@@ -443,7 +451,9 @@ int main() {
 					//Load and execute
 					loadAndExecute(base64DecodedProgram, base64Program.size(), arguments);
 					//Reset our buffer, otherwise it will fail if the next message is shorter
+
 					memset(buffer, '\0', sizeof(buffer));
+					memset(base64DecodedProgram, '\0', sizeof(base64DecodedProgram));
 				}
 			}
 
